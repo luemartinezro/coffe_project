@@ -1,0 +1,72 @@
+# import libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns 
+
+# carga de datos
+
+"""
+Id: ide catador
+    codigo de muestra
+    
+"""
+
+# Tiene la identificacion del cafe hecha por los catadores. Asignación de categorias a cada cafe, le asigna un cualidad
+descrip = pd.read_csv("descriptores.csv")
+descrip.head()
+
+# muestras de cafe distintas. Sere de puntajes va 6-10 cada columna es una variable
+puntajes = pd.read_csv("puntajes.csv")
+puntajes.head()
+
+# General review
+descrip.info()
+puntajes.info()
+
+# resumenes
+
+puntajes.describe()
+
+# samples
+descrip.sample(10)
+puntajes.sample(10)
+
+# created a functions
+
+def summary(df:pd.DataFrame, var1:float):
+    mean = df[var1].mean()
+    median = df[var1].median()
+    std = df[var1].std()
+    var = df[var1].var()
+    min = df[var1].min()
+    max = df[var1].max()
+    q25 = df[var1].quantile(0.25)
+    q75= df[var1].quantile(0.75)    
+    
+    return mean, median, std, var, min, max, q25, q75
+
+
+def hist(df:pd.DataFrame, var1:float):
+    graph = sns.histplot(data=df, x=var1)
+    return graph
+
+
+def boxplot(df:pd.DataFrame):
+    df.iloc[:, 3:14].plot(
+        kind='box',
+        subplots=True,
+        sharey=False,
+        figsize=(15,6) 
+    )
+    plt.subplots_adjust(wspace=0.5)
+    plt.show()
+    
+boxplot(puntajes)
+
+hist(puntajes, 'TOTAL_SCORE')
+
+summary(puntajes, 'TOTAL_SCORE')
+
+
+puntajes.iloc[:, 3:13].corr()
